@@ -2,6 +2,8 @@
 // By Erik Svensson, posted on eriksven.com in March 2013
 // License: LGPLv3 - GNU LESSER GENERAL PUBLIC LICENSE Version 3 - http://www.gnu.org/licenses/lgpl.txt
 
+Define cREGEX_INCLUDED for 1
+
 // Visual DataFlex COM proxy classes generated from C:\Windows\system32\vbscript.dll\2
 Use FlexCom20.pkg
 
