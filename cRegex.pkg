@@ -1,4 +1,4 @@
-// cRegex class v1.00:
+// cRegex class v1.01:
 // By Erik Svensson, posted on eriksven.com in March 2013
 // License: LGPLv3 - GNU LESSER GENERAL PUBLIC LICENSE Version 3 - http://www.gnu.org/licenses/lgpl.txt
 
@@ -8,7 +8,7 @@ Define cREGEX_INCLUDED for 1
 Use FlexCom20.pkg
 
 // CLSID: {3F4DACA0-160D-11D2-A8E9-00104B365C9F}
-Class cComIRegExp is a Mixin
+Class cComIRegularExpressions is a Mixin
 
     { MethodType=Property DesignTime=False }
     Function ComPattern Returns String
@@ -96,8 +96,8 @@ End_Class
 // CoClass
 // ProgID: VBScript.RegExp
 // CLSID: {3F4DACA4-160D-11D2-A8E9-00104B365C9F}
-Class cComRegExp is a cComAutomationObject
-    Import_Class_Protocol cComIRegExp
+Class cComRegularExpressions is a cComAutomationObject
+    Import_Class_Protocol cComIRegularExpressions
 
     Procedure Construct_Object
         Forward Send Construct_Object
@@ -107,7 +107,7 @@ Class cComRegExp is a cComAutomationObject
 End_Class
 
 // CLSID: {3F4DACA1-160D-11D2-A8E9-00104B365C9F}
-Class cComIMatch is a Mixin
+Class cComIRegExMatch is a Mixin
 
     { MethodType=Property DesignTime=False }
     Function ComValue Returns String
@@ -139,8 +139,8 @@ End_Class
 
 // CoClass
 // CLSID: {3F4DACA5-160D-11D2-A8E9-00104B365C9F}
-Class cComMatch is a cComAutomationObject
-    Import_Class_Protocol cComIMatch
+Class cComRegExMatch is a cComAutomationObject
+    Import_Class_Protocol cComIRegExMatch
 
     Procedure Construct_Object
         Forward Send Construct_Object
@@ -149,7 +149,7 @@ Class cComMatch is a cComAutomationObject
 End_Class
 
 // CLSID: {3F4DACA2-160D-11D2-A8E9-00104B365C9F}
-Class cComIMatchCollection is a Mixin
+Class cComIRegExMatchCollection is a Mixin
 
     { MethodType=Property DesignTime=False }
     Function ComItem Integer llindex Returns Variant
@@ -183,8 +183,8 @@ End_Class
 
 // CoClass
 // CLSID: {3F4DACA6-160D-11D2-A8E9-00104B365C9F}
-Class cComMatchCollection is a cComAutomationObject
-    Import_Class_Protocol cComIMatchCollection
+Class cComRegExMatchCollection is a cComAutomationObject
+    Import_Class_Protocol cComIRegExMatchCollection
 
     Procedure Construct_Object
         Forward Send Construct_Object
@@ -192,8 +192,22 @@ Class cComMatchCollection is a cComAutomationObject
     End_Procedure
 End_Class
 
+Function CreateVDFComProxy Integer iClassId Variant vComObject Returns Handle
+    Handle hoProxy
+    
+    Get Create iClassId to hoProxy
+    If (not (IsNullComObject (vComObject))) Begin
+        Set pvComObject of hoProxy to vComObject
+    End
+    Else Begin
+        Send CreateComObject of hoProxy
+    End
+    
+    Function_Return hoProxy
+End_Function
+
 //Wrapper
-Class cRegex is a cObject
+Class cRegularExpressions is a cObject
     
     Procedure Construct_Object
         Variant vMyVar
@@ -253,7 +267,7 @@ Function Regex_Replace Global String sSource String sReplaceWith String sPattern
     Handle hRegEx
     String sRetVal
     
-    Get Create U_cRegEx to hRegEx
+    Get Create U_cRegularExpressions to hRegEx
     If (hRegEx > 0) Begin
         If (num_arguments = 4) Begin
             Set IgnoreCase of hRegEx to bIgnoreCase
@@ -275,7 +289,7 @@ Function Regex_IsMatch Global String sInput String sPattern Boolean bIgnoreCase 
     Handle hRegEx
     Boolean bIsMatch
     
-    Get Create U_cRegEx to hRegEx
+    Get Create U_cRegularExpressions to hRegEx
     If (hRegEx > 0) Begin
         If (num_arguments = 3) Begin
             Set IgnoreCase of hRegEx to bIgnoreCase
@@ -307,7 +321,7 @@ Function Regex_Match Global String sInput String sPattern Boolean bIgnoreCase Re
     tRegexMatch match null
     tRegexMatch[] matchArr
 
-    Get Create U_cRegEx to hRegEx
+    Get Create U_cRegularExpressions to hRegEx
 
     If (hRegEx > 0) Begin
         If (num_arguments = 3) Begin
