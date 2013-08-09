@@ -1,4 +1,4 @@
-// cRegex class v1.01:
+// cRegex class v1.02:
 // By Erik Svensson, posted on eriksven.com in March 2013
 // License: LGPLv3 - GNU LESSER GENERAL PUBLIC LICENSE Version 3 - http://www.gnu.org/licenses/lgpl.txt
 
@@ -221,7 +221,7 @@ Class cRegularExpressions is a cObject
         Property Boolean pbGlobalFind False
         
         Move (NullComObject()) to vMyVar
-        Get CreateVDFComProxy u_cComRegExp vMyVar to hoRegExp
+        Get CreateVDFComProxy u_cComRegularExpressions vMyVar to hoRegExp
         
         Set phRegex to hoRegExp
         
@@ -329,12 +329,12 @@ Function Regex_Match Global String sInput String sPattern Boolean bIgnoreCase Re
         End
         Set Pattern of hRegEx to sPattern
         Set GlobalFind of hRegEx to True
-        Get Create U_cComMatchCollection  to hMatchCollection
+        Get Create U_cComRegExMatchCollection  to hMatchCollection
         Get ComExecute of (phRegex(hRegEx)) sInput to vMatchCollection
         Set pvComObject of hMatchCollection to vMatchCollection
         Get ComCount of hMatchCollection to iItems
         For iItem from 1 to iItems
-            Get Create U_cComMatch to hMatch
+            Get Create U_cComRegExMatch to hMatch
             Get ComItem of hMatchCollection (iItem-1) to vMatch
             Set pvComObject of hMatch to vMatch
             Get ComValue of hMatch to match.Val
