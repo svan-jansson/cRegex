@@ -1,4 +1,4 @@
-// cRegex class v1.02:
+// cRegex class v1.03:
 // By Erik Svensson, posted on eriksven.com in March 2013
 // License: LGPLv3 - GNU LESSER GENERAL PUBLIC LICENSE Version 3 - http://www.gnu.org/licenses/lgpl.txt
 
@@ -192,20 +192,6 @@ Class cComRegExMatchCollection is a cComAutomationObject
     End_Procedure
 End_Class
 
-Function CreateVDFComProxy Integer iClassId Variant vComObject Returns Handle
-    Handle hoProxy
-    
-    Get Create iClassId to hoProxy
-    If (not (IsNullComObject (vComObject))) Begin
-        Set pvComObject of hoProxy to vComObject
-    End
-    Else Begin
-        Send CreateComObject of hoProxy
-    End
-    
-    Function_Return hoProxy
-End_Function
-
 //Wrapper
 Class cRegularExpressions is a cObject
     
@@ -219,25 +205,13 @@ Class cRegularExpressions is a cObject
         Property Boolean pbIgnoreCase False
         Property Handle  phRegex 0
         Property Boolean pbGlobalFind False
-        
-        Move (NullComObject()) to vMyVar
-        Get CreateVDFComProxy u_cComRegularExpressions vMyVar to hoRegExp
-        
+
+        Get Create U_cComRegularExpressions to hoRegExp
+        Send CreateComObject of hoRegExp
+
         Set phRegex to hoRegExp
         
     End_Procedure
-
-    Function CreateVDFComProxy Integer iClassId Variant vComObject Returns Handle
-        Handle hoProxy
-        Get Create iClassId to hoProxy
-        If (not (IsNullComObject (vComObject))) Begin
-            Set pvComObject of hoProxy to vComObject
-        End
-        Else Begin
-            Send CreateComObject of hoProxy
-        End
-        Function_Return hoProxy
-    End_Function
 
     Procedure Set Pattern String sPattern
         Set psPattern to sPattern
@@ -329,7 +303,7 @@ Function Regex_Match Global String sInput String sPattern Boolean bIgnoreCase Re
         End
         Set Pattern of hRegEx to sPattern
         Set GlobalFind of hRegEx to True
-        Get Create U_cComRegExMatchCollection  to hMatchCollection
+        Get Create U_cComRegExMatchCollection to hMatchCollection
         Get ComExecute of (phRegex(hRegEx)) sInput to vMatchCollection
         Set pvComObject of hMatchCollection to vMatchCollection
         Get ComCount of hMatchCollection to iItems
@@ -341,8 +315,9 @@ Function Regex_Match Global String sInput String sPattern Boolean bIgnoreCase Re
             Get ComFirstIndex of hMatch to match.FirstIndex
             Get ComLength of hMatch to match.Length
             Move match to matchArr[SizeOfArray(matchArr)]
+            Send Destroy of hMatch
         Loop
-        
+        Send Destroy of hMatchCollection
         Send Destroy of hRegEx
     End
     Else Begin
